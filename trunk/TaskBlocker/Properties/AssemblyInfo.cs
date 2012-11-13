@@ -6,7 +6,21 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Task Blocker")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription(@"
+What is Task Blocker?
+*************************
+
+Task Blocker is an administration tool which can prevent running any application in Windows.
+
+
+Web sites:
+***********
+
+Task Blocker official site:
+https://sourceforge.net/projects/taskblocker/
+
+Task Blocker support:
+https://sourceforge.net/p/taskblocker/tickets/")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Marco \"SNaKE\" Baccarani")]
 [assembly: AssemblyProduct("Task Blocker")]

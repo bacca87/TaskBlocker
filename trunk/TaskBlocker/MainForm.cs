@@ -241,11 +241,13 @@ namespace TaskBlocker
                 {
                     statusLabel.Text = "Running.";
                     notifyIcon.BalloonTipText = statusLabel.Text;
+                    notifyIcon.Text = "Task Blocker: Running.";
                 }
                 else
                 {
                     statusLabel.Text = "Stopped.";
                     notifyIcon.BalloonTipText = statusLabel.Text;
+                    notifyIcon.Text = "Task Blocker: Stopped.";
                 }
 
                 notifyIcon.BalloonTipTitle = "Task Blocker - Info";

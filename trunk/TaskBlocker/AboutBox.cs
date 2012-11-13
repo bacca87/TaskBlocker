@@ -13,13 +13,65 @@ namespace TaskBlocker
         public AboutBox()
         {
             InitializeComponent();
-            this.Text = String.Format("About {0}", AssemblyTitle);
-            this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
-            this.labelCopyright.Text = AssemblyCopyright;
-            this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            Text = String.Format("About {0}", AssemblyTitle);
+            labelProductName.Text = AssemblyProduct;
+            labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
+            labelCopyright.Text = AssemblyCopyright;
+            labelCompanyName.Text = AssemblyCompany;
+            textBoxDescription.Text = AssemblyDescription;
+            licenseTextBox.Text = License;
+            thirdPartyLicensesTextBox.Text = ThirdPartyLicenses;
         }
+
+        #region Custom Attribute
+
+        public string License
+        {
+            get
+            {
+                return @"
+Task Blocker is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Task Blocker is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. 
+
+You should have received a copy of the GNU General Public License along with Task Blocker.  If not, see <http://www.gnu.org/licenses/>.";
+            }
+        }
+
+        public string ThirdPartyLicenses
+        {
+            get
+            {
+                string silkicon = @"
+_________________________________________
+
+Silk icon set 1.3
+
+Mark James
+http://www.famfamfam.com/lab/icons/silk/
+
+This work is licensed under a
+Creative Commons Attribution 2.5 License.
+[ http://creativecommons.org/licenses/by/2.5/ ]
+
+This means you may use it for any purpose,
+and make any changes you like.
+All I ask is that you include a link back
+to this page in your credits.
+
+Are you using this icon set? Send me an email
+(including a link or picture if available) to
+mjames@gmail.com
+
+Any other questions about this icon set please
+contact mjames@gmail.com
+_________________________________________
+";
+                return silkicon;
+            }
+        }
+
+        #endregion
 
         #region Assembly Attribute Accessors
 
