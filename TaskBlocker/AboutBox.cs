@@ -18,12 +18,34 @@ namespace TaskBlocker
             labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
             labelCopyright.Text = AssemblyCopyright;
             labelCompanyName.Text = AssemblyCompany;
-            textBoxDescription.Text = AssemblyDescription;
+            textBoxDescription.Text = Description;
             licenseTextBox.Text = License;
             thirdPartyLicensesTextBox.Text = ThirdPartyLicenses;
         }
 
         #region Custom Attribute
+
+        public string Description
+        {
+            get 
+            {
+                return @"
+What is Task Blocker?
+*************************
+
+Task Blocker is an administration tool which can prevent running any application in Windows.
+
+
+Web sites:
+***********
+
+Task Blocker official site:
+https://sourceforge.net/projects/taskblocker/
+
+Task Blocker support:
+https://sourceforge.net/p/taskblocker/tickets/";
+            }
+        }
 
         public string License
         {
