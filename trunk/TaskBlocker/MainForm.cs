@@ -131,14 +131,14 @@ namespace TaskBlocker
             {
                 blockedTaskCountLabel.Text = (++m_blockedTaskCount).ToString();
 
+                Logger.Istance.info("The task " + e.Task.Name + " was successfully blocked!");
+
                 if (Preferences.showNotifications)
                 {
                     notifyIcon.BalloonTipTitle = "Task Blocker - " + e.Task.Name;
                     notifyIcon.BalloonTipText = "The task " + e.Task.Name + " was successfully blocked!";
                     notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
                     notifyIcon.ShowBalloonTip(500);
-
-                    Logger.Istance.info(notifyIcon.BalloonTipText);
                 }
 
                 refreshTaskList();
