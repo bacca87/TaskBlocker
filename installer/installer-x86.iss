@@ -24,7 +24,7 @@ DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 LicenseFile=D:\Progetti\TaskBlocker\trunk\LICENSE.txt
 OutputDir=D:\Progetti\TaskBlocker\trunk\installer
-OutputBaseFilename=taskblocker-v{#MyAppVersion}
+OutputBaseFilename=taskblocker-v{#MyAppVersion}-setup
 Compression=lzma
 SolidCompression=yes
 
