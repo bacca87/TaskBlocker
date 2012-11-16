@@ -22,8 +22,8 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=D:\Progetti\TaskBlocker\trunk\TaskBlocker\bin\x86\Release\LICENSE.txt
-OutputDir=D:\Progetti\TaskBlocker\trunk\TaskBlocker\installer
+LicenseFile=D:\Progetti\TaskBlocker\trunk\LICENSE.txt
+OutputDir=D:\Progetti\TaskBlocker\trunk\installer
 OutputBaseFilename=taskblocker-v{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
@@ -36,9 +36,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "D:\Progetti\TaskBlocker\trunk\TaskBlocker\bin\x86\Release\TaskBlocker.exe"; DestDir: "{app}"; Flags: ignoreversion 32bit
-Source: "D:\Progetti\TaskBlocker\trunk\TaskBlocker\bin\x86\Release\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Progetti\TaskBlocker\trunk\TaskBlocker\bin\x86\Release\README.txt"; DestDir: "{app}"; Flags: isreadme
+Source: "D:\Progetti\TaskBlocker\trunk\bin\x86\Release\TaskBlocker.exe"; DestDir: "{app}"; Flags: ignoreversion 32bit
+Source: "D:\Progetti\TaskBlocker\trunk\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\Progetti\TaskBlocker\trunk\README.txt"; DestDir: "{app}"; Flags: isreadme
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
