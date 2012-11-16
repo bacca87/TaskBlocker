@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBlocker", "TaskBlocker\TaskBlocker.csproj", "{C1711A0D-B1BE-4D49-BC3F-B8ACB9E1C82B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBlocker", "TaskBlocker.csproj", "{C1711A0D-B1BE-4D49-BC3F-B8ACB9E1C82B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
