@@ -25,6 +25,7 @@ using System.Text;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Reflection;
 
 namespace TaskBlocker
 {
@@ -60,8 +61,7 @@ namespace TaskBlocker
     }
 
     public class TaskBlocker
-    {
-        private bool m_exit;
+    {        
         private Thread m_thread;
 
         List<Process> m_activeProcess;
@@ -74,7 +74,28 @@ namespace TaskBlocker
                 
         private object m_fileLock;
         private object m_taskLock;
-        
+        private object m_exitLock;
+
+        private bool m_exit;
+        public bool Exit
+        {
+            get
+            {
+                lock (m_exitLock)
+                {
+                    return m_exit;
+                }
+            }
+
+            internal set
+            {
+                lock (m_exitLock)
+                {
+                    m_exit = value;
+                }
+            }
+        }
+
         private List<Task> m_taskList;
         public List<Task> TaskList
         {
@@ -151,10 +172,10 @@ namespace TaskBlocker
             m_exit = false;
             m_fileLock = new object();
             m_taskLock = new object();
+            m_exitLock = new object();
             m_activeProcess = new List<Process>();
             m_taskList = loadTaskList();
             m_isKiller = true;
-            
         }
 
         public void start()
@@ -167,19 +188,19 @@ namespace TaskBlocker
 
         public void stop()
         {
-            m_exit = true;
+            Exit = true;
             // Use the Join method to block the current thread 
             // until the object's thread terminates.
             m_thread.Join();
         }
 
         private void run()
-        {   
-            m_exit = false;
+        {
+            Exit = false;
 
             TaskList = loadTaskList();
 
-            while (!m_exit)
+            while (!Exit)
             {
                 try
                 {   
@@ -195,7 +216,10 @@ namespace TaskBlocker
                                 if (m_taskList[j].Enabled && m_taskList[j].Name == processlist[i].ProcessName.ToLower() + ".exe")
                                 {
                                     if (isKiller)
+                                    {
                                         processlist[i].Kill();
+                                        processlist[i].WaitForExit(1000);
+                                    }
                                     else
                                     {
                                         if (processExist(processlist[i]))
@@ -266,7 +290,7 @@ namespace TaskBlocker
                 if (!File.Exists(FILENAME))
                     File.Create(FILENAME).Dispose();
 
-                using (StreamReader sr = new StreamReader(FILENAME))
+                using (StreamReader sr = new StreamReader(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + FILENAME))
                 {
                     while (sr.Peek() >= 0)
                     {
@@ -291,8 +315,8 @@ namespace TaskBlocker
             {
                 if (!File.Exists(FILENAME))
                     File.Create(FILENAME).Dispose();
-                
-                using (StreamWriter sw = new StreamWriter(FILENAME))
+
+                using (StreamWriter sw = new StreamWriter(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + FILENAME))
                 {
                     foreach (Task task in m_taskList)
                     {

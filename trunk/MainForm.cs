@@ -99,15 +99,19 @@ namespace TaskBlocker
                 List<Task> tmpList = m_taskBlocker.TaskList;
 
                 foreach (Task task in tmpList)
-                {
                     taskDataGrid.Rows.Add(new object[] { task.Enabled, task.Name, task.Count });
-                }
+
+                if (tmpList.Count > 0)
+                    enableAllCheckBox.Visible = true;
+                else
+                    enableAllCheckBox.Visible = false;
             }
             catch (Exception ex)
             {
                 Logger.Istance.fatal(ex.ToString());
                 MessageBox.Show("An error occurred while trying to refresh the task list.\nCheck the log file for more informations.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+                stopMonitoring();
                 Application.Exit();
             }
         }
@@ -118,7 +122,7 @@ namespace TaskBlocker
             {
                 Logger.Istance.debug("Start monitoring.");
                 m_taskBlocker.isKiller = !Preferences.MonitorMode;
-                m_taskBlocker.start();                
+                m_taskBlocker.start();
             }
             catch (Exception ex)
             {
@@ -237,6 +241,7 @@ namespace TaskBlocker
 
         private void exitMenuItem_Click(object sender, EventArgs e)
         {
+            stopMonitoring();
             Application.Exit();
         }
 
