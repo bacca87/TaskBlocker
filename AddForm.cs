@@ -122,6 +122,7 @@ namespace TaskBlocker
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
+            TaskName = string.Empty;
             Close();
         }
 
@@ -154,6 +155,9 @@ namespace TaskBlocker
                 else
                     error = true;
             }
+
+            if (TaskName == Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName).ToLower())
+                error = true;
             
             if(error)
                 MessageBox.Show("You must select a valid process name before continue!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);

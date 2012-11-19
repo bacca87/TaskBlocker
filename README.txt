@@ -1,8 +1,8 @@
 **********************************************************************
-*																	 *
-*							Task Blocker						 	 *
-*																	 *
-* 	Copyright (C) 2012 Marco "SNaKE" Baccarani bacca87@gmail.com 	 *
+*                                                                    *
+*                          Task Blocker                              *
+*                                                                    *
+*    Copyright (C) 2012 Marco "SNaKE" Baccarani bacca87@gmail.com    *
 **********************************************************************
 
 
