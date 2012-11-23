@@ -60,7 +60,11 @@ namespace TaskBlocker
             Preferences.logEditor = logEditorTextBox.Text.Trim();
             Preferences.runOnStart = runOnStartCheckBox.Checked;
             Preferences.showNotifications = showNotificationsGroupBox.Checked;
-            Preferences.MonitorMode = monitorModeCheckBox.Checked;
+
+            if (Preferences.MonitorMode != monitorModeCheckBox.Checked)
+                MessageBox.Show("Monitor mode has been changed. Restart for applying your changes!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            Preferences.MonitorMode = monitorModeCheckBox.Checked; 
 
             Close();
         }
