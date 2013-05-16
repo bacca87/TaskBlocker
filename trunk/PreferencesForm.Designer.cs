@@ -66,6 +66,7 @@ namespace TaskBlocker
             this.maxFileSizeNumeric = new System.Windows.Forms.NumericUpDown();
             this.sizeWarningCheckBox = new System.Windows.Forms.CheckBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.realtimeCheckBox = new System.Windows.Forms.CheckBox();
             this.generalGroup.SuspendLayout();
             this.taskGroup.SuspendLayout();
             this.logGroupBox.SuspendLayout();
@@ -125,12 +126,13 @@ namespace TaskBlocker
             // 
             // taskGroup
             // 
+            this.taskGroup.Controls.Add(this.realtimeCheckBox);
             this.taskGroup.Controls.Add(this.monitorModeCheckBox);
             this.taskGroup.Controls.Add(this.runOnStartCheckBox);
             this.taskGroup.Controls.Add(this.showNotificationsGroupBox);
             this.taskGroup.Location = new System.Drawing.Point(12, 197);
             this.taskGroup.Name = "taskGroup";
-            this.taskGroup.Size = new System.Drawing.Size(296, 91);
+            this.taskGroup.Size = new System.Drawing.Size(296, 112);
             this.taskGroup.TabIndex = 4;
             this.taskGroup.TabStop = false;
             this.taskGroup.Text = "Task";
@@ -157,7 +159,7 @@ namespace TaskBlocker
             // 
             // applyButton
             // 
-            this.applyButton.Location = new System.Drawing.Point(233, 294);
+            this.applyButton.Location = new System.Drawing.Point(233, 315);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(75, 23);
             this.applyButton.TabIndex = 5;
@@ -167,7 +169,7 @@ namespace TaskBlocker
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(152, 294);
+            this.cancelButton.Location = new System.Drawing.Point(152, 315);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 6;
@@ -266,11 +268,21 @@ namespace TaskBlocker
             this.openFileDialog.DefaultExt = "exe";
             this.openFileDialog.Filter = "exe files (*.exe)|*.exe";
             // 
+            // realtimeCheckBox
+            // 
+            this.realtimeCheckBox.AutoSize = true;
+            this.realtimeCheckBox.Location = new System.Drawing.Point(14, 89);
+            this.realtimeCheckBox.Name = "realtimeCheckBox";
+            this.realtimeCheckBox.Size = new System.Drawing.Size(254, 17);
+            this.realtimeCheckBox.TabIndex = 3;
+            this.realtimeCheckBox.Text = "Real time check. (WARNING: high CPU usage!)";
+            this.realtimeCheckBox.UseVisualStyleBackColor = true;
+            // 
             // PreferencesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(321, 324);
+            this.ClientSize = new System.Drawing.Size(321, 350);
             this.Controls.Add(this.logGroupBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.applyButton);
@@ -314,5 +326,6 @@ namespace TaskBlocker
         private System.Windows.Forms.TextBox logEditorTextBox;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.CheckBox monitorModeCheckBox;
+        private System.Windows.Forms.CheckBox realtimeCheckBox;
     }
 }

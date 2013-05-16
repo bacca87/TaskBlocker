@@ -122,6 +122,7 @@ namespace TaskBlocker
             {
                 Logger.Istance.debug("Start monitoring.");
                 m_taskBlocker.isKiller = !Preferences.MonitorMode;
+                m_taskBlocker.RealTimeCheck = Preferences.RealTimeCheck;
                 m_taskBlocker.start();
             }
             catch (Exception ex)
@@ -196,7 +197,7 @@ namespace TaskBlocker
 
             if (add.TaskName != string.Empty)
             {
-                if (m_taskBlocker.taskExist(add.TaskName))
+                if (m_taskBlocker.taskExist(add.TaskName) != -1)
                 {
                     MessageBox.Show("The selected process already exists in the list!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;

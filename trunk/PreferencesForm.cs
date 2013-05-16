@@ -48,6 +48,7 @@ namespace TaskBlocker
             runOnStartCheckBox.Checked = Preferences.runOnStart;
             showNotificationsGroupBox.Checked = Preferences.showNotifications;
             monitorModeCheckBox.Checked = Preferences.MonitorMode;
+            realtimeCheckBox.Checked = Preferences.RealTimeCheck;
         }
 
         private void applyButton_Click(object sender, EventArgs e)
@@ -59,12 +60,13 @@ namespace TaskBlocker
             Preferences.maxLogFileSize = Convert.ToInt64(maxFileSizeNumeric.Value) * 1024 * 1024;
             Preferences.logEditor = logEditorTextBox.Text.Trim();
             Preferences.runOnStart = runOnStartCheckBox.Checked;
-            Preferences.showNotifications = showNotificationsGroupBox.Checked;
+            Preferences.showNotifications = showNotificationsGroupBox.Checked;            
 
             if (Preferences.MonitorMode != monitorModeCheckBox.Checked)
                 MessageBox.Show("Monitor mode has been changed. Restart for applying your changes!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            Preferences.MonitorMode = monitorModeCheckBox.Checked; 
+            Preferences.MonitorMode = monitorModeCheckBox.Checked;
+            Preferences.RealTimeCheck = realtimeCheckBox.Checked;
 
             Close();
         }
