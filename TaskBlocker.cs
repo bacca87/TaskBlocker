@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Reflection;
+using System.Management;
 
 namespace TaskBlocker
 {
@@ -64,6 +65,9 @@ namespace TaskBlocker
     {        
         private Thread m_thread;
 
+        private ManagementEventWatcher startWatch;
+        private ManagementEventWatcher stopWatch;
+
         List<Process> m_activeProcess;
 
         private const string FILENAME = "tasklist.dat";
@@ -75,6 +79,8 @@ namespace TaskBlocker
         private object m_fileLock;
         private object m_taskLock;
         private object m_exitLock;
+
+        private bool m_eventRunning;
 
         private bool m_exit;
         public bool Exit
@@ -120,10 +126,10 @@ namespace TaskBlocker
         {
             get
             {
-                if (m_thread != null)
+                if(RealTimeCheck && m_thread != null)
                     return m_thread.IsAlive;
                 else
-                    return false;
+                    return m_eventRunning;
             }
         }
 
@@ -149,6 +155,8 @@ namespace TaskBlocker
                 }
             }
         }
+
+        public bool RealTimeCheck { get; set; }
 
         #region Events
 
@@ -176,22 +184,48 @@ namespace TaskBlocker
             m_activeProcess = new List<Process>();
             m_taskList = loadTaskList();
             m_isKiller = true;
+            RealTimeCheck = false;
+            m_eventRunning = false;
+
+            startWatch = new ManagementEventWatcher(new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace WITHIN 0.01"));
+            stopWatch = new ManagementEventWatcher(new WqlEventQuery("SELECT * FROM Win32_ProcessStopTrace WITHIN 0.01"));
+            startWatch.EventArrived += new EventArrivedEventHandler(startWatch_EventArrived);
+            stopWatch.EventArrived += new EventArrivedEventHandler(stopWatch_EventArrived);
+            startWatch.Stopped += new StoppedEventHandler(startWatch_stopped);
         }
 
         public void start()
-        {   
-            m_thread = new Thread(run);
-            m_thread.Name = "Task Blocker";
-            //m_thread.IsBackground = true;
-            m_thread.Start();
+        {
+            if (RealTimeCheck)
+            {
+                m_thread = new Thread(run);
+                m_thread.Name = "Task Blocker";
+                //m_thread.IsBackground = true;
+                m_thread.Start();
+            }
+            else
+            {
+                TaskList = loadTaskList();
+                startWatch.Start();
+                stopWatch.Start();
+                m_eventRunning = true;
+            }
         }
 
         public void stop()
         {
-            Exit = true;
-            // Use the Join method to block the current thread 
-            // until the object's thread terminates.
-            m_thread.Join();
+            if(RealTimeCheck)
+            {
+                Exit = true;
+                // Use the Join method to block the current thread 
+                // until the object's thread terminates.
+                m_thread.Join();
+            }
+            else
+            {
+                startWatch.Stop();
+                stopWatch.Stop();
+            }
         }
 
         private void run()
@@ -203,7 +237,7 @@ namespace TaskBlocker
             while (!Exit)
             {
                 try
-                {   
+                {
                     lock (m_taskLock)
                     {
                         Process[] processlist = Process.GetProcesses();
@@ -227,7 +261,7 @@ namespace TaskBlocker
 
                                         m_activeProcess.Add(processlist[i]);
                                     }
-                                    
+
                                     m_taskList[j].Count++;
                                     saveTaskList(true);
                                     OnBlockedTask(this, new BlockedTaskEventArgs(m_taskList[j]));
@@ -266,19 +300,19 @@ namespace TaskBlocker
 
             return false;
         }
-        
-        public bool taskExist(string taskName)
+
+        public int taskExist(string taskName)
         {
             lock (m_taskLock)
             {
-                foreach (Task task in m_taskList)
+                for (int i = 0; i < m_taskList.Count(); i++)
                 {
-                    if (task.Name == taskName)
-                        return true;
+                    if (m_taskList[i].Name == taskName)
+                        return i;
                 }
             }
 
-            return false;
+            return -1;
         }
         
         private List<Task> loadTaskList()
@@ -414,6 +448,48 @@ namespace TaskBlocker
                     }
                 }
             }
+        }
+        
+        private void stopWatch_EventArrived(object sender, EventArrivedEventArgs e)
+        {
+            // unused
+        }
+
+        private void startWatch_EventArrived(object sender, EventArrivedEventArgs e)
+        {
+            try
+            {
+                lock (m_taskLock)
+                {
+                    string processName = e.NewEvent.Properties["ProcessName"].Value.ToString();
+                    int processId = Convert.ToInt32(e.NewEvent.Properties["ProcessId"].Value);
+                    int taskIndex = taskExist(processName.ToLower());
+                    
+                    if (taskIndex != -1 && m_taskList[taskIndex].Enabled)
+                    {
+                        Process targetProcess = Process.GetProcessById(processId);
+
+                        if (targetProcess != null && isKiller)
+                        {
+                            targetProcess.Kill();
+                            targetProcess.WaitForExit(1000);
+                        }
+
+                        m_taskList[taskIndex].Count++;
+                        saveTaskList(true);
+                        OnBlockedTask(this, new BlockedTaskEventArgs(m_taskList[taskIndex]));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Istance.exception(ex);
+            }
+        }
+
+        private void startWatch_stopped(Object sender, StoppedEventArgs e)
+        {
+            m_eventRunning = false;
         }
     }
 }

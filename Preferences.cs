@@ -293,5 +293,33 @@ namespace TaskBlocker
                 }
             }
         }
+
+        public static bool RealTimeCheck
+        {
+            get
+            {
+                try
+                {
+                    return Convert.ToBoolean(ini.readValue("Task", "RealTimeCheck", "False"));
+                }
+                catch (Exception ex)
+                {
+                    Logger.Istance.exception(ex);
+                    return false;
+                }
+            }
+
+            set
+            {
+                try
+                {
+                    ini.writeValue("Task", "RealTimeCheck", value ? "True" : "False");
+                }
+                catch (Exception ex)
+                {
+                    Logger.Istance.exception(ex);
+                }
+            }
+        }
     }
 }
