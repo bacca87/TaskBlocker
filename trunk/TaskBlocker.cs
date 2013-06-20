@@ -187,9 +187,9 @@ namespace TaskBlocker
             RealTimeCheck = false;
             m_eventRunning = false;
 
-            startWatch = new ManagementEventWatcher(new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace WITHIN 0.01"));
+            startWatch = new ManagementEventWatcher(new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace WITHIN 0.01"));                    
             stopWatch = new ManagementEventWatcher(new WqlEventQuery("SELECT * FROM Win32_ProcessStopTrace WITHIN 0.01"));
-            startWatch.EventArrived += new EventArrivedEventHandler(startWatch_EventArrived);
+            startWatch. EventArrived += new EventArrivedEventHandler(startWatch_EventArrived);
             stopWatch.EventArrived += new EventArrivedEventHandler(stopWatch_EventArrived);
             startWatch.Stopped += new StoppedEventHandler(startWatch_stopped);
         }
@@ -209,6 +209,8 @@ namespace TaskBlocker
                 startWatch.Start();
                 stopWatch.Start();
                 m_eventRunning = true;
+
+                checkProcesses();
             }
         }
 
@@ -230,6 +232,8 @@ namespace TaskBlocker
 
         private void run()
         {
+            Process[] processlist;
+
             Exit = false;
 
             TaskList = loadTaskList();
@@ -240,7 +244,8 @@ namespace TaskBlocker
                 {
                     lock (m_taskLock)
                     {
-                        Process[] processlist = Process.GetProcesses();
+                        /* Old method to check process, this is the faster but need a very high cpu usage
+                        processlist = Process.GetProcesses();
 
                         for (int i = 0; i < processlist.Length; i++)
                         {
@@ -266,6 +271,35 @@ namespace TaskBlocker
                                     saveTaskList(true);
                                     OnBlockedTask(this, new BlockedTaskEventArgs(m_taskList[j]));
                                     break;
+                                }
+                            }                            
+                        }
+                        */                        
+
+                        for (int j = 0; j < m_taskList.Count; j++)
+                        {
+                            if (m_taskList[j].Enabled)
+                            {
+                                processlist = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(m_taskList[j].Name));
+
+                                for (int i = 0; i < processlist.Length; i++)
+                                {
+                                    if (isKiller)
+                                    {
+                                        processlist[i].Kill();
+                                        processlist[i].WaitForExit(1000);
+                                    }
+                                    else
+                                    {
+                                        if (processExist(processlist[i]))
+                                            continue;
+
+                                        m_activeProcess.Add(processlist[i]);
+                                    }
+
+                                    m_taskList[j].Count++;
+                                    saveTaskList(true);
+                                    OnBlockedTask(this, new BlockedTaskEventArgs(m_taskList[j]));
                                 }
                             }
                         }
@@ -449,7 +483,34 @@ namespace TaskBlocker
                 }
             }
         }
-        
+
+        private void checkProcesses()
+        {
+            lock (m_taskLock)
+            {
+                for (int j = 0; j < m_taskList.Count; j++)
+                {
+                    if (m_taskList[j].Enabled)
+                    {
+                        Process[] processlist = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(m_taskList[j].Name));
+
+                        for (int i = 0; i < processlist.Length; i++)
+                        {
+                            if (isKiller)
+                            {
+                                processlist[i].Kill();
+                                processlist[i].WaitForExit(1000);
+                            }
+
+                            m_taskList[j].Count++;
+                            saveTaskList(true);
+                            OnBlockedTask(this, new BlockedTaskEventArgs(m_taskList[j]));
+                        }
+                    }
+                }
+            }
+        }
+
         private void stopWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
             // unused
