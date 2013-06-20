@@ -66,6 +66,10 @@ namespace TaskBlocker
                 MessageBox.Show("Monitor mode has been changed. Restart for applying your changes!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             Preferences.MonitorMode = monitorModeCheckBox.Checked;
+
+            if (Preferences.RealTimeCheck != realtimeCheckBox.Checked)
+                MessageBox.Show("RealTimeCheck has been changed. Restart for applying your changes!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
             Preferences.RealTimeCheck = realtimeCheckBox.Checked;
 
             Close();
