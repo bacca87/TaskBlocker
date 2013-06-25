@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Task Blocker"
-#define MyAppVersion "1.4"
+#define MyAppVersion "1.5"
 #define MyAppPublisher "Marco Baccarani"
 #define MyAppURL "http://sourceforge.net/projects/taskblocker/"
 #define MyAppExeName "TaskBlocker.exe"
