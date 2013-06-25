@@ -243,8 +243,7 @@ namespace TaskBlocker
                 try
                 {
                     lock (m_taskLock)
-                    {
-                        /* Old method to check process, this is the faster but need a very high cpu usage
+                    {   
                         processlist = Process.GetProcesses();
 
                         for (int i = 0; i < processlist.Length; i++)
@@ -274,8 +273,8 @@ namespace TaskBlocker
                                 }
                             }                            
                         }
-                        */                        
 
+                        /* Alternative method 
                         for (int j = 0; j < m_taskList.Count; j++)
                         {
                             if (m_taskList[j].Enabled)
@@ -302,7 +301,7 @@ namespace TaskBlocker
                                     OnBlockedTask(this, new BlockedTaskEventArgs(m_taskList[j]));
                                 }
                             }
-                        }
+                        } */
 
                         // check if tasks are still alive
                         if (!isKiller)
